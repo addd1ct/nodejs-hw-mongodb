@@ -1,4 +1,4 @@
-import { Student } from '../models/contacts.models';
+import { Student } from '../models/contacts.models.js';
 
 export async function fetchAllStudents() {
   return Student.find();
