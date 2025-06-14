@@ -7,19 +7,23 @@ export async function getAllStudents(req, res) {
     message: 'Successfully found contacts!',
     data: students,
   });
-}
+} 
 
 export async function getStudentById(req, res) {
-  const { studentId } = req.params;
-  const student = await fetchStudentById(studentId);
+  try {
+    const { studentId } = req.params;
+    const student = await fetchStudentById(studentId);
 
-  if (!student) {
-    return res.status(404).json({ message: 'Contact not found' });
+    if (!student) {
+      return res.status(404).json({ message: 'Contact not found' });
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: `Successfully found contact with id ${studentId}!`,
+      data: student,
+    });
+  } catch {
+    res.status(500).json({ message: 'Internal Server Error' });
   }
-
-  res.status(200).json({
-    status: 200,
-    message: `Successfully found contact with id ${studentId}!`,
-    data: student,
-  });
 }
