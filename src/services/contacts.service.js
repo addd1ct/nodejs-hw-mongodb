@@ -1,9 +1,9 @@
 import { Student } from '../models/contacts.models.js';
 
 export async function fetchAllContacts() {
-  return Contact.find();
+  return Student.find();
 }
 
-export async function fetchContactById(contactId) {
-  return Contact.findById(contactId);
+export async function fetchContactById(studentId) {
+  return Student.findById(studentId);
 }
