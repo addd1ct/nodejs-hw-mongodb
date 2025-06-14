@@ -19,7 +19,7 @@ export async function getStudentById(req, res) {
 
   res.status(200).json({
     status: 200,
-    message: Successfully found contact with id ${studentId}!,
+    message: `Successfully found contact with id ${studentId}!`,
     data: student,
   });
 }
