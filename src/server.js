@@ -12,8 +12,8 @@ export function setupServer() {
 
   app.use('/contacts', contactsRouter);
 
-  app.use('*', (_, res) => {
-    res.status(404).json({ message: 'Not found' });
+  app.all('/{*any}', (_, res) => {
+  res.status(404).json({ message: 'Not found' });
   });
 
   app.listen(PORT, () => {
