@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { getAllStudents, getStudentById } from '../controllers/contacts.controller.js';
+import { getAllContacts, getContactById } from '../controllers/contacts.controller.js';
 
 const router = Router();
 
-router.get('/', getAllStudents);
-router.get('/:studentId', getStudentById);
+router.get('/', getAllContacts);
+router.get('/:contactId', getContactById);
 
 export default router;

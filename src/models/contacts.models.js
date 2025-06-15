@@ -2,15 +2,20 @@ import mongoose from 'mongoose';
 
 const { Schema, model } = mongoose;
 
-const studentSchema = new Schema(
+const contactSchema = new Schema(
   {
     name: { type: String, required: true },
-    age: { type: Number, required: true },
-    gender: { type: String, enum: ['male', 'female'], required: true },
-    avgMark: { type: Number, required: true },
-    onDuty: { type: Boolean, default: false },
+    phoneNumber: { type: String, required: true },
+    email: { type: String },
+    isFavourite: { type: Boolean, default: false },
+    contactType: {
+      type: String,
+      enum: ['work', 'home', 'personal'],
+      required: true,
+      default: 'personal',
+    },
   },
   { timestamps: true }
 );
 
-export const Student = model('Student', studentSchema);
+export const Contact = model('Contact', contactSchema);
