@@ -1,7 +1,7 @@
 import { initMongoConnection } from './db/initMongoConnection.js';
 import { setupServer } from './server.js';
 import fs from 'fs/promises';
-import Contact from './models/Contact.js';
+import Contact from './models/contacts.models.js';
 
 await initMongoConnection();
 
