@@ -7,3 +7,15 @@ export async function fetchAllContacts() {
 export async function fetchContactById(contactId) {
   return Contact.findById(contactId);
 }
+
+export async function createContact(data) {
+  return await Contact.create(data);
+}
+
+export async function updateContact(contactId, data) {
+  return await Contact.findByIdAndUpdate(contactId, data, { new: true });
+}
+
+export async function deleteContact(contactId) {
+  return await Contact.findByIdAndDelete(contactId);
+}
