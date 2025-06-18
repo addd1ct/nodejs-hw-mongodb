@@ -1,21 +1,39 @@
 import { Contact } from '../models/contacts.models.js';
 
-export async function fetchAllContacts() {
-  return Contact.find();
+export async function fetchAllContacts({ page, perPage, sortBy, sortOrder, filter }) {
+  const skip = (page - 1) * perPage;
+  const sort = { [sortBy]: sortOrder === 'desc' ? -1 : 1 };
+
+  const [contacts, totalItems] = await Promise.all([
+    Contact.find(filter).sort(sort).skip(skip).limit(perPage),
+    Contact.countDocuments(filter),
+  ]);
+
+  const totalPages = Math.ceil(totalItems / perPage);
+
+  return {
+    data: contacts,
+    page,
+    perPage,
+    totalItems,
+    totalPages,
+    hasPreviousPage: page > 1,
+    hasNextPage: page < totalPages,
+  };
 }
 
-export async function fetchContactById(contactId) {
-  return Contact.findById(contactId);
+export async function fetchContactById(id) {
+  return Contact.findById(id);
 }
 
 export async function createContact(data) {
-  return await Contact.create(data);
+  return Contact.create(data);
 }
 
-export async function updateContact(contactId, data) {
-  return await Contact.findByIdAndUpdate(contactId, data, { new: true });
+export async function updateContact(id, data) {
+  return Contact.findByIdAndUpdate(id, data, { new: true });
 }
 
-export async function deleteContact(contactId) {
-  return await Contact.findByIdAndDelete(contactId);
+export async function deleteContact(id) {
+  return Contact.findByIdAndDelete(id);
 }
