@@ -15,11 +15,7 @@ export function setupServer() {
   app.use('/contacts', contactsRouter);
   app.use(notFoundHandler);
   app.use(errorHandler);
-
-  app.all('/{*any}', (_, res) => {
-  res.status(404).json({ message: 'Not found' });
-  });
-
+  
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
