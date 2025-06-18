@@ -1,4 +1,4 @@
-import { fetchAllContacts, fetchContactById, createContact as createContactService, updateContact as updateContactService, deleteContact as deleteContactService } from '../services/contacts.service.js';
+import { fetchAllContacts, fetchContactById, createContact, updateContact, deleteContact } from '../services/contacts.service.js';
 import createHttpError from 'http-errors';
 
 export async function getAllContacts(req, res) {
@@ -40,7 +40,7 @@ export async function updateContact(req, res) {
   const updated = await updateContactService(contactId, req.body);
 
   if (!updated) {
-    throw createError(404, 'Contact not found');
+  throw createHttpError(404, 'Contact not found');
   }
 
   res.status(200).json({
@@ -55,8 +55,8 @@ export async function deleteContact(req, res) {
   const deleted = await deleteContactService(contactId);
 
   if (!deleted) {
-    throw createError(404, 'Contact not found');
-  }
+    throw createHttpError(404, 'Contact not found');
+  }  
 
   res.status(204).send();
 }
