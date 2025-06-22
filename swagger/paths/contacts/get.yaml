@@ -1,0 +1,18 @@
+get:
+  tags:
+    - Contacts
+  summary: Отримати всі контакти
+  operationId: getAllContacts
+  description: Повертає список всіх контактів, підтримує фільтрацію за параметрами запиту.
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: favorite
+      in: query
+      description: Фільтр за улюбленими контактами (true або false)
+      required: false
+      schema:
+        type: boolean
+  responses:
+    '200':
+      description: Список контактів успішно отримано
