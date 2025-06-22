@@ -1,14 +1,12 @@
 import { Schema, model } from 'mongoose';
 
-const sessionSchema = new Schema(
+const userSchema = new Schema(
   {
-    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    accessToken: { type: String, required: true },
-    refreshToken: { type: String, required: true },
-    accessTokenValidUntil: { type: Date, required: true },
-    refreshTokenValidUntil: { type: Date, required: true },
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
   },
   { versionKey: false, timestamps: true }
 );
 
-export const Session = model('Session', sessionSchema);
+export const User = model('User', userSchema);
