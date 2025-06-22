@@ -17,37 +17,22 @@ export const registerUserService = async ({ name, email, password }) => {
 
 export const loginUserService = async (email, password) => {
   const user = await User.findOne({ email });
-  if (!user) {
-    throw createHttpError(401, 'Email or password is wrong');
-  }
-
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) {
-    throw createHttpError(401, 'Email or password is wrong');
-  }
+  if (!user) throw createHttpError(401, 'Email or password is wrong');
+  if (!(await bcrypt.compare(password, user.password))) throw createHttpError(401, 'Email or password is wrong');
 
   await Session.findOneAndDelete({ userId: user._id });
+  const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '15m' });
+  const refreshToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
-  const accessTokenValidUntil = new Date(Date.now() + 15 * 60 * 1000);
-  const refreshTokenValidUntil = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-
-  const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-    expiresIn: '15m',
-  });
-
-  const refreshToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
-  });
-
-  await Session.create({
+  const session = await Session.create({
     userId: user._id,
     accessToken,
     refreshToken,
-    accessTokenValidUntil,
-    refreshTokenValidUntil,
+    accessTokenValidUntil: new Date(Date.now() + 15 * 60 * 1000),
+    refreshTokenValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
   });
 
-  return { accessToken, refreshToken };
+  return { accessToken, refreshToken, sessionId: session._id.toString() };
 };
 
 export const refreshSessionService = async (refreshToken) => {
