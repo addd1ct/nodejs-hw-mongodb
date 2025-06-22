@@ -25,27 +25,51 @@ export const loginUserController = async (req, res, next) => {
     const { accessToken, refreshToken, sessionId } = await loginUserService(email, password);
 
     res
-      .cookie('refreshToken', refreshToken, { httpOnly: true, sameSite: 'strict', secure: process.env.NODE_ENV === 'production', maxAge: 30 * 24 * 60 * 60 * 1000 })
-      .cookie('sessionId', sessionId,        { httpOnly: true, sameSite: 'strict', secure: process.env.NODE_ENV === 'production', maxAge: 30 * 24 * 60 * 60 * 1000 })
+      .cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        sameSite: 'strict',
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 1000 * 60 * 60 * 24 * 30,
+      })
+      .cookie('sessionId', sessionId, {
+        httpOnly: true,
+        sameSite: 'strict',
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 1000 * 60 * 60 * 24 * 30,
+      })
       .status(200)
-      .json({ status: 200, message: 'Successfully logged in an user!', data: { accessToken } });
+      .json({
+        status: 200,
+        message: 'Successfully logged in an user!',
+        data: { accessToken },
+      });
   } catch (err) {
     next(err);
   }
 };
 
 
+
 export const refreshSessionController = async (req, res, next) => {
   try {
     const { refreshToken, sessionId } = req.cookies;
     if (!sessionId) throw createHttpError(401, 'Session ID missing');
-    const result = await refreshSessionService(sessionId, refreshToken);
-    const { accessToken, newRefreshToken } = result;
+
+    const { accessToken, newRefreshToken } = await refreshSessionService(sessionId, refreshToken);
 
     res
-      .cookie('refreshToken', newRefreshToken, { ... })
+      .cookie('refreshToken', newRefreshToken, {
+        httpOnly: true,
+        sameSite: 'strict',
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 1000 * 60 * 60 * 24 * 30,
+      })
       .status(200)
-      .json({ status: 200, message: 'Successfully refreshed a session!', data: { accessToken } });
+      .json({
+        status: 200,
+        message: 'Successfully refreshed a session!',
+        data: { accessToken },
+      });
   } catch (err) {
     next(err);
   }
@@ -56,6 +80,7 @@ export const logoutUserController = async (req, res, next) => {
   try {
     const { sessionId } = req.cookies;
     if (!sessionId) throw createHttpError(401, 'Session ID missing');
+
     await logoutUserService(sessionId);
 
     res.clearCookie('refreshToken').clearCookie('sessionId').sendStatus(204);
@@ -63,3 +88,4 @@ export const logoutUserController = async (req, res, next) => {
     next(err);
   }
 };
+

@@ -21,19 +21,24 @@ export const loginUserService = async (email, password) => {
   if (!(await bcrypt.compare(password, user.password))) throw createHttpError(401, 'Email or password is wrong');
 
   await Session.findOneAndDelete({ userId: user._id });
+
   const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '15m' });
   const refreshToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+
+  const accessTokenValidUntil = new Date(Date.now() + 15 * 60 * 1000);
+  const refreshTokenValidUntil = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
   const session = await Session.create({
     userId: user._id,
     accessToken,
     refreshToken,
-    accessTokenValidUntil: new Date(Date.now() + 15 * 60 * 1000),
-    refreshTokenValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    accessTokenValidUntil,
+    refreshTokenValidUntil,
   });
 
-  return { accessToken, refreshToken, sessionId: session._id.toString() };
+  return { accessToken, refreshToken, sessionId: session._id };
 };
+
 
 export const refreshSessionService = async (refreshToken) => {
   if (!refreshToken) {
