@@ -1,5 +1,6 @@
 import { fetchAllContacts, fetchContactById, createContact, updateContact, deleteContact } from '../services/contacts.service.js';
 import createHttpError from 'http-errors';
+import { uploader } from '../utils/cloudinary.js'; // Убедись, что этот модуль настроен
 
 export async function getAllContacts(req, res) {
   const {
@@ -52,7 +53,15 @@ export async function getContactById(req, res) {
 }
 
 export async function createContactController(req, res) {
-  const photoUrl = req.file?.path || null;
+  let photoUrl = null;
+
+  if (req.file) {
+    const result = await uploader.upload(req.file.path, {
+      folder: 'contacts',
+    });
+    photoUrl = result.secure_url;
+  }
+
   const newContact = await createContact({ ...req.body, photo: photoUrl }, req.user._id);
 
   res.status(201).json({
@@ -64,7 +73,15 @@ export async function createContactController(req, res) {
 
 export async function updateContactController(req, res) {
   const { contactId } = req.params;
-  const photoUrl = req.file?.path || null;
+  let photoUrl = req.body.photo || null;
+
+  if (req.file) {
+    const result = await uploader.upload(req.file.path, {
+      folder: 'contacts',
+    });
+    photoUrl = result.secure_url;
+  }
+
   const updated = await updateContact(contactId, { ...req.body, photo: photoUrl }, req.user._id);
 
   if (!updated) {
