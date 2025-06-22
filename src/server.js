@@ -4,7 +4,7 @@ import cors from 'cors';
 import pino from 'pino-http';
 import contactsRouter from './routers/contacts.routers.js';
 import authRouter from './routers/auth.routers.js';
-import apiDocsRouter from './routes/apiDocs.js';
+import apiDocsRouter from './routers/apiDocs.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import dotenv from 'dotenv';
