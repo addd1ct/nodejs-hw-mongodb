@@ -48,7 +48,36 @@
           ],
           "responses": {
             "200": {
-              "description": "Список контактів успішно отримано"
+              "description": "Список контактів успішно отримано",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "integer",
+                        "example": 200
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Successfully found contacts!"
+                      },
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "../../components/schemas/Contact.yaml"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Неавторизований"
+            },
+            "500": {
+              "description": "Внутрішня помилка сервера"
             }
           }
         }
@@ -105,10 +134,36 @@
           },
           "responses": {
             "201": {
-              "description": "Контакт успішно створено"
+              "description": "Контакт успішно створено",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "integer",
+                        "example": 201
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Successfully created contact!"
+                      },
+                      "data": {
+                        "$ref": "../../components/schemas/Contact.yaml"
+                      }
+                    }
+                  }
+                }
+              }
             },
             "400": {
               "description": "Некоректні дані запиту"
+            },
+            "401": {
+              "description": "Неавторизований"
+            },
+            "500": {
+              "description": "Внутрішня помилка сервера"
             }
           }
         }
@@ -141,10 +196,36 @@
           ],
           "responses": {
             "200": {
-              "description": "Контакт знайдено"
+              "description": "Контакт знайдено",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "integer",
+                        "example": 200
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Successfully found contact!"
+                      },
+                      "data": {
+                        "$ref": "../../../components/schemas/Contact.yaml"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Неавторизований"
             },
             "404": {
               "description": "Контакт не знайдено"
+            },
+            "500": {
+              "description": "Внутрішня помилка сервера"
             }
           }
         }
@@ -206,10 +287,39 @@
           },
           "responses": {
             "200": {
-              "description": "Контакт успішно оновлено"
+              "description": "Контакт успішно оновлено",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "integer",
+                        "example": 200
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Successfully updated contact!"
+                      },
+                      "data": {
+                        "$ref": "../../../components/schemas/Contact.yaml"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Некоректні дані запиту"
+            },
+            "401": {
+              "description": "Неавторизований"
             },
             "404": {
               "description": "Контакт не знайдено"
+            },
+            "500": {
+              "description": "Внутрішня помилка сервера"
             }
           }
         }
@@ -240,10 +350,33 @@
           ],
           "responses": {
             "200": {
-              "description": "Контакт успішно видалено"
+              "description": "Контакт успішно видалено",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "integer",
+                        "example": 200
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Successfully deleted contact!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Неавторизований"
             },
             "404": {
               "description": "Контакт не знайдено"
+            },
+            "500": {
+              "description": "Внутрішня помилка сервера"
             }
           }
         }
