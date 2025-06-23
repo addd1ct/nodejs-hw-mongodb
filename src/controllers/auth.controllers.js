@@ -32,7 +32,7 @@ export const loginUserController = async (req, res, next) => {
         secure: process.env.NODE_ENV === 'production',
         maxAge: 1000 * 60 * 60 * 24 * 30,
       })
-      .cookie('sid', sessionId, {
+      .cookie('sessionId', sessionId, {
         httpOnly: true,
         sameSite: 'strict',
         secure: process.env.NODE_ENV === 'production',
@@ -51,21 +51,21 @@ export const loginUserController = async (req, res, next) => {
 
 export const refreshSessionController = async (req, res, next) => {
   try {
-    const { refreshToken, sid } = req.cookies;
-    if (!sid) throw createHttpError(401, 'Session ID missing');
+    const { refreshToken, sessionId } = req.cookies;
+    if (!sessionId) throw createHttpError(401, 'Session ID missing');
 
-    const { accessToken, newRefreshToken } = await refreshSessionService(sid, refreshToken);
+    const { accessToken, newRefreshToken } = await refreshSessionService(sessionId, refreshToken);
 
     res
       .cookie('refreshToken', newRefreshToken, {
         httpOnly: true,
-        sameSite: 'Strict',
+        sameSite: 'strict',
         secure: process.env.NODE_ENV === 'production',
         maxAge: 1000 * 60 * 60 * 24 * 30,
       })
-      .cookie('sid', sid, {
+      .cookie('sessionId', sessionId, {
         httpOnly: true,
-        sameSite: 'Strict',
+        sameSite: 'strict',
         secure: process.env.NODE_ENV === 'production',
         maxAge: 1000 * 60 * 60 * 24 * 30,
       })
@@ -82,12 +82,12 @@ export const refreshSessionController = async (req, res, next) => {
 
 export const logoutUserController = async (req, res, next) => {
   try {
-    const { sid } = req.cookies;
-    if (!sid) throw createHttpError(401, 'Session ID missing');
+    const { sessionId } = req.cookies;
+    if (!sessionId) throw createHttpError(401, 'Session ID missing');
 
-    await logoutUserService(sid);
+    await logoutUserService(sessionId);
 
-    res.clearCookie('refreshToken').clearCookie('sid').sendStatus(204);
+    res.clearCookie('refreshToken').clearCookie('sessionId').sendStatus(204);
   } catch (err) {
     next(err);
   }
