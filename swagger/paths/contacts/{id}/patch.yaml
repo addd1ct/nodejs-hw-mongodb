@@ -1,60 +1,59 @@
-patch:
-  tags:
-    - Contacts
-  summary: Оновити контакт за ID
-  operationId: updateContactById
-  description: Оновлює дані контакту за його унікальним ідентифікатором.
-  security:
-    - bearerAuth: []
-  parameters:
-    - name: contactId
-      in: path
-      required: true
-      description: Ідентифікатор контакту
-      schema:
-        type: string
-  requestBody:
-    description: Поля для оновлення контакту
+tags:
+  - Contacts
+summary: Оновити контакт за ID
+operationId: updateContactById
+description: Оновлює дані контакту за його унікальним ідентифікатором.
+security:
+  - bearerAuth: []
+parameters:
+  - name: contactId
+    in: path
     required: true
+    description: Ідентифікатор контакту
+    schema:
+      type: string
+requestBody:
+  description: Поля для оновлення контакту
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+          email:
+            type: string
+          phone:
+            type: string
+          favorite:
+            type: boolean
+        example:
+          name: 'Updated Name'
+          email: 'updated@example.com'
+          phone: '+123456789'
+          favorite: true
+responses:
+  '200':
+    description: Контакт успішно оновлено
     content:
       application/json:
         schema:
           type: object
           properties:
-            name:
+            status:
+              type: integer
+              example: 200
+            message:
               type: string
-            email:
-              type: string
-            phone:
-              type: string
-            favorite:
-              type: boolean
-          example:
-            name: 'Updated Name'
-            email: 'updated@example.com'
-            phone: '+123456789'
-            favorite: true
-  responses:
-    '200':
-      description: Контакт успішно оновлено
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status:
-                type: integer
-                example: 200
-              message:
-                type: string
-                example: 'Successfully updated contact!'
-              data:
-                $ref: '../../../components/schemas/Contact.yaml'
-    '400':
-      description: Некоректні дані запиту
-    '401':
-      description: Неавторизований
-    '404':
-      description: Контакт не знайдено
-    '500':
-      description: Внутрішня помилка сервера
+              example: 'Successfully updated contact!'
+            data:
+              $ref: '../../../components/schemas/Contact.yaml'
+  '400':
+    description: Некоректні дані запиту
+  '401':
+    description: Неавторизований
+  '404':
+    description: Контакт не знайдено
+  '500':
+    description: Внутрішня помилка сервера

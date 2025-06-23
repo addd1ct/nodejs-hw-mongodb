@@ -1,35 +1,34 @@
-delete:
-  tags:
-    - Contacts
-  summary: Видалити контакт за ID
-  operationId: deleteContactById
-  description: Видаляє контакт за його унікальним ідентифікатором.
-  security:
-    - bearerAuth: []
-  parameters:
-    - name: contactId
-      in: path
-      required: true
-      description: Ідентифікатор контакту
-      schema:
-        type: string
-  responses:
-    '200':
-      description: Контакт успішно видалено
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status:
-                type: integer
-                example: 200
-              message:
-                type: string
-                example: 'Successfully deleted contact!'
-    '401':
-      description: Неавторизований
-    '404':
-      description: Контакт не знайдено
-    '500':
-      description: Внутрішня помилка сервера
+tags:
+  - Contacts
+summary: Видалити контакт за ID
+operationId: deleteContactById
+description: Видаляє контакт за його унікальним ідентифікатором.
+security:
+  - bearerAuth: []
+parameters:
+  - name: contactId
+    in: path
+    required: true
+    description: Ідентифікатор контакту
+    schema:
+      type: string
+responses:
+  '200':
+    description: Контакт успішно видалено
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Successfully deleted contact!'
+  '401':
+    description: Неавторизований
+  '404':
+    description: Контакт не знайдено
+  '500':
+    description: Внутрішня помилка сервера
