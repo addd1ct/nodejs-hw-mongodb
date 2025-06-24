@@ -36,7 +36,60 @@
         ],
         "parameters": [
           {
-            "name": "favorite",
+            "name": "page",
+            "in": "query",
+            "description": "Номер сторінки",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "description": "Кількість контактів на сторінці",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "example": 10
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Поле для сортування",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "name"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "description": "Напрямок сортування",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "example": "asc"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Тип контакту (work, home, personal)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "isFavourite",
             "in": "query",
             "description": "Фільтр за улюбленими контактами (true або false)",
             "required": false,
@@ -73,10 +126,24 @@
             }
           },
           "401": {
-            "description": "Неавторизований"
+            "description": "Неавторизований",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Внутрішня помилка сервера"
+            "description": "Внутрішня помилка сервера",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       },
@@ -86,44 +153,55 @@
         ],
         "summary": "Додати новий контакт",
         "operationId": "createContact",
-        "description": "Створює новий контакт з переданими даними.",
+        "description": "Створює новий контакт з переданими даними у форматі form-data.",
         "security": [
           {
             "bearerAuth": []
           }
         ],
         "requestBody": {
-          "description": "Дані нового контакту",
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "required": [
                   "name",
                   "email",
-                  "phone"
+                  "phoneNumber",
+                  "contactType"
                 ],
                 "properties": {
                   "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "John Doe"
                   },
                   "email": {
                     "type": "string",
-                    "format": "email"
+                    "format": "email",
+                    "example": "john.doe@example.com"
                   },
-                  "phone": {
-                    "type": "string"
+                  "phoneNumber": {
+                    "type": "string",
+                    "example": "+1234567890"
                   },
-                  "favorite": {
-                    "type": "boolean"
+                  "contactType": {
+                    "type": "string",
+                    "enum": [
+                      "work",
+                      "home",
+                      "personal"
+                    ],
+                    "example": "work"
+                  },
+                  "isFavourite": {
+                    "type": "boolean",
+                    "example": false
+                  },
+                  "photo": {
+                    "type": "string",
+                    "format": "binary"
                   }
-                },
-                "example": {
-                  "name": "John Doe",
-                  "email": "john.doe@example.com",
-                  "phone": "+123456789",
-                  "favorite": false
                 }
               }
             }
@@ -154,13 +232,34 @@
             }
           },
           "400": {
-            "description": "Некоректні дані запиту"
+            "description": "Некоректні дані запиту",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "401": {
-            "description": "Неавторизований"
+            "description": "Неавторизований",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Внутрішня помилка сервера"
+            "description": "Внутрішня помилка сервера",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       }
@@ -214,13 +313,34 @@
             }
           },
           "401": {
-            "description": "Неавторизований"
+            "description": "Неавторизований",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "404": {
-            "description": "Контакт не знайдено"
+            "description": "Контакт не знайдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Внутрішня помилка сервера"
+            "description": "Внутрішня помилка сервера",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       },
@@ -248,31 +368,42 @@
           }
         ],
         "requestBody": {
-          "description": "Поля для оновлення контакту",
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
                   "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Updated Name"
                   },
                   "email": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "email",
+                    "example": "updated@example.com"
                   },
-                  "phone": {
-                    "type": "string"
+                  "phoneNumber": {
+                    "type": "string",
+                    "example": "+1234567890"
                   },
-                  "favorite": {
-                    "type": "boolean"
+                  "contactType": {
+                    "type": "string",
+                    "enum": [
+                      "work",
+                      "home",
+                      "personal"
+                    ],
+                    "example": "home"
+                  },
+                  "isFavourite": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "photo": {
+                    "type": "string",
+                    "format": "binary"
                   }
-                },
-                "example": {
-                  "name": "Updated Name",
-                  "email": "updated@example.com",
-                  "phone": "+123456789",
-                  "favorite": true
                 }
               }
             }
@@ -303,16 +434,44 @@
             }
           },
           "400": {
-            "description": "Некоректні дані запиту"
+            "description": "Некоректні дані запиту",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "401": {
-            "description": "Неавторизований"
+            "description": "Неавторизований",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "404": {
-            "description": "Контакт не знайдено"
+            "description": "Контакт не знайдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Внутрішня помилка сервера"
+            "description": "Внутрішня помилка сервера",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       },
@@ -340,34 +499,38 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Контакт успішно видалено",
+          "204": {
+            "description": "Контакт успішно видалено (без тіла відповіді)"
+          },
+          "401": {
+            "description": "Неавторизований",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 200
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Successfully deleted contact!"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Error"
                 }
               }
             }
           },
-          "401": {
-            "description": "Неавторизований"
-          },
           "404": {
-            "description": "Контакт не знайдено"
+            "description": "Контакт не знайдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Внутрішня помилка сервера"
+            "description": "Внутрішня помилка сервера",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       }
@@ -437,6 +600,19 @@
           "contactType",
           "userId"
         ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "Bad Request"
+          }
+        }
       }
     }
   }
