@@ -13,26 +13,32 @@ parameters:
     schema:
       type: string
 requestBody:
-  description: Поля для оновлення контакту
   required: true
   content:
-    application/json:
+    multipart/form-data:
       schema:
         type: object
         properties:
           name:
             type: string
+            example: Updated Name
           email:
             type: string
-          phone:
+            format: email
+            example: updated@example.com
+          phoneNumber:
             type: string
-          favorite:
+            example: '+1234567890'
+          contactType:
+            type: string
+            enum: [work, home, personal]
+            example: home
+          isFavourite:
             type: boolean
-        example:
-          name: 'Updated Name'
-          email: 'updated@example.com'
-          phone: '+123456789'
-          favorite: true
+            example: true
+          photo:
+            type: string
+            format: binary
 responses:
   '200':
     description: Контакт успішно оновлено
@@ -46,14 +52,30 @@ responses:
               example: 200
             message:
               type: string
-              example: 'Successfully updated contact!'
+              example: Successfully updated contact!
             data:
               $ref: '../../../components/schemas/Contact.yaml'
   '400':
     description: Некоректні дані запиту
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/schemas/Error.yaml'
   '401':
     description: Неавторизований
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/schemas/Error.yaml'
   '404':
     description: Контакт не знайдено
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/schemas/Error.yaml'
   '500':
     description: Внутрішня помилка сервера
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/schemas/Error.yaml'

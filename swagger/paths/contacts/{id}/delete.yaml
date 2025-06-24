@@ -13,22 +13,23 @@ parameters:
     schema:
       type: string
 responses:
-  '200':
-    description: Контакт успішно видалено
+  '204':
+    description: Контакт успішно видалено (без тіла відповіді)
+  '401':
+    description: Неавторизований
     content:
       application/json:
         schema:
-          type: object
-          properties:
-            status:
-              type: integer
-              example: 200
-            message:
-              type: string
-              example: 'Successfully deleted contact!'
-  '401':
-    description: Неавторизований
+          $ref: '../../../components/schemas/Error.yaml'
   '404':
     description: Контакт не знайдено
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/schemas/Error.yaml'
   '500':
     description: Внутрішня помилка сервера
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/schemas/Error.yaml'

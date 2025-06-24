@@ -2,35 +2,41 @@ tags:
   - Contacts
 summary: Додати новий контакт
 operationId: createContact
-description: Створює новий контакт з переданими даними.
+description: Створює новий контакт з переданими даними у форматі form-data.
 security:
   - bearerAuth: []
 requestBody:
-  description: Дані нового контакту
   required: true
   content:
-    application/json:
+    multipart/form-data:
       schema:
         type: object
         required:
           - name
           - email
-          - phone
+          - phoneNumber
+          - contactType
         properties:
           name:
             type: string
+            example: John Doe
           email:
             type: string
             format: email
-          phone:
+            example: john.doe@example.com
+          phoneNumber:
             type: string
-          favorite:
+            example: '+1234567890'
+          contactType:
+            type: string
+            enum: [work, home, personal]
+            example: work
+          isFavourite:
             type: boolean
-        example:
-          name: 'John Doe'
-          email: 'john.doe@example.com'
-          phone: '+123456789'
-          favorite: false
+            example: false
+          photo:
+            type: string
+            format: binary
 responses:
   '201':
     description: Контакт успішно створено
@@ -44,12 +50,24 @@ responses:
               example: 201
             message:
               type: string
-              example: 'Successfully created contact!'
+              example: Successfully created contact!
             data:
               $ref: '../../components/schemas/Contact.yaml'
   '400':
     description: Некоректні дані запиту
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/Error.yaml'
   '401':
     description: Неавторизований
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/Error.yaml'
   '500':
     description: Внутрішня помилка сервера
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/Error.yaml'

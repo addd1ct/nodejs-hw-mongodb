@@ -30,7 +30,19 @@ responses:
               $ref: '../../../components/schemas/Contact.yaml'
   '401':
     description: Неавторизований
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/schemas/Error.yaml'
   '404':
     description: Контакт не знайдено
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/schemas/Error.yaml'
   '500':
     description: Внутрішня помилка сервера
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/schemas/Error.yaml'
