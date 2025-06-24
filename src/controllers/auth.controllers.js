@@ -29,13 +29,13 @@ export const loginUserController = async (req, res, next) => {
       .cookie('refreshToken', refreshToken, {
         httpOnly: true,
         sameSite: 'strict',
-        secure: process.env.NODE_ENV === 'production',
+        secure: false,
         maxAge: 1000 * 60 * 60 * 24 * 30,
       })
       .cookie('sessionId', sessionId, {
         httpOnly: true,
         sameSite: 'strict',
-        secure: process.env.NODE_ENV === 'production',
+        secure: false,
         maxAge: 1000 * 60 * 60 * 24 * 30,
       })
       .status(200)
@@ -60,13 +60,13 @@ export const refreshSessionController = async (req, res, next) => {
       .cookie('refreshToken', newRefreshToken, {
         httpOnly: true,
         sameSite: 'strict',
-        secure: process.env.NODE_ENV === 'production',
+        secure: false,
         maxAge: 1000 * 60 * 60 * 24 * 30,
       })
       .cookie('sessionId', sessionId, {
         httpOnly: true,
         sameSite: 'strict',
-        secure: process.env.NODE_ENV === 'production',
+        secure: false,
         maxAge: 1000 * 60 * 60 * 24 * 30,
       })
       .status(200)
