@@ -8,7 +8,7 @@ properties:
     type: string
     description: Ім'я контакту
     example: 'John Doe'
-  phoneNumber:
+  phone:
     type: string
     description: Телефонний номер контакту
     example: '+1234567890'
@@ -29,16 +29,12 @@ properties:
       - home
       - personal
     example: work
-  userId:
-    type: string
-    description: Ідентифікатор користувача-власника контакту
-    example: '64a7f4c2e1234567890abcd2'
   photo:
     type: string
     description: URL фотографії контакту
     example: 'https://example.com/photos/contact1.jpg'
+
 required:
   - name
-  - phoneNumber
-  - contactType
-  - userId
+  - email
+  - phone
