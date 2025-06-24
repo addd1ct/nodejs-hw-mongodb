@@ -23,7 +23,7 @@ export const registerController = async (req, res, next) => {
 export const loginUserController = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const { accessToken, refreshToken, sessionId } = await loginUserService(email, password);
+    const { accessToken, refreshToken, sessionId: sid } = await loginUserService(email, password);
 
     res
       .cookie('refreshToken', refreshToken, {
@@ -32,7 +32,7 @@ export const loginUserController = async (req, res, next) => {
         secure: false,
         maxAge: 1000 * 60 * 60 * 24 * 30,
       })
-      .cookie('sid', sessionId, {
+      .cookie('sid', sid, {
         httpOnly: true,
         sameSite: 'strict',
         secure: false,
