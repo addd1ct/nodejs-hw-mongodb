@@ -557,7 +557,7 @@
             "description": "Ім'я контакту",
             "example": "John Doe"
           },
-          "phone": {
+          "phoneNumber": {
             "type": "string",
             "description": "Телефонний номер контакту",
             "example": "+1234567890"
@@ -591,8 +591,8 @@
         },
         "required": [
           "name",
-          "email",
-          "phone"
+          "contactType",
+          "phoneNumber"
         ]
       },
       "Error": {
