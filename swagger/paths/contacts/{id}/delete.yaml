@@ -1,0 +1,35 @@
+tags:
+  - Contacts
+summary: Видалити контакт за ID
+operationId: deleteContactById
+description: Видаляє контакт за його унікальним ідентифікатором.
+security:
+  - bearerAuth: []
+parameters:
+  - name: contactId
+    in: path
+    required: true
+    description: Ідентифікатор контакту
+    schema:
+      type: string
+responses:
+  '204':
+    description: Контакт успішно видалено (без тіла відповіді)
+  '401':
+    description: Неавторизований
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/schemas/Error.yaml'
+  '404':
+    description: Контакт не знайдено
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/schemas/Error.yaml'
+  '500':
+    description: Внутрішня помилка сервера
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/schemas/Error.yaml'

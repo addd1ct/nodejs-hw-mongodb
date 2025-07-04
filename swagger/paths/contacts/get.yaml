@@ -1,0 +1,79 @@
+tags:
+  - Contacts
+summary: Отримати всі контакти
+operationId: getAllContacts
+description: Повертає список всіх контактів, підтримує фільтрацію за параметрами запиту.
+security:
+  - bearerAuth: []
+parameters:
+  - name: page
+    in: query
+    description: Номер сторінки
+    required: false
+    schema:
+      type: integer
+      example: 1
+  - name: perPage
+    in: query
+    description: Кількість контактів на сторінці
+    required: false
+    schema:
+      type: integer
+      example: 10
+  - name: sortBy
+    in: query
+    description: Поле для сортування
+    required: false
+    schema:
+      type: string
+      example: name
+  - name: sortOrder
+    in: query
+    description: Напрямок сортування
+    required: false
+    schema:
+      type: string
+      enum: [asc, desc]
+      example: asc
+  - name: type
+    in: query
+    description: Тип контакту (work, home, personal)
+    required: false
+    schema:
+      type: string
+  - name: isFavourite
+    in: query
+    description: Фільтр за улюбленими контактами (true або false)
+    required: false
+    schema:
+      type: boolean
+responses:
+  '200':
+    description: Список контактів успішно отримано
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Successfully found contacts!'
+            data:
+              type: array
+              items:
+                $ref: '../../components/schemas/Contact.yaml'
+  '401':
+    description: Неавторизований
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/Error.yaml'
+  '500':
+    description: Внутрішня помилка сервера
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/Error.yaml'

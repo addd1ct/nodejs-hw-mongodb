@@ -4,6 +4,7 @@ import cors from 'cors';
 import pino from 'pino-http';
 import contactsRouter from './routers/contacts.routers.js';
 import authRouter from './routers/auth.routers.js';
+import apiDocsRouter from './routers/apiDocs.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import dotenv from 'dotenv';
@@ -21,6 +22,10 @@ export function setupServer() {
   app.use('/contacts', contactsRouter);
   app.use('/auth', authRouter);
 
+  app.use('/api-docs', apiDocsRouter);
+
+  app.use('/swagger.json', express.static(path.join(process.cwd(), 'docs', 'swagger.json')));
+
   app.use(notFoundHandler);
   app.use(errorHandler);
 
@@ -28,4 +33,6 @@ export function setupServer() {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
+
+  return app;
 }
