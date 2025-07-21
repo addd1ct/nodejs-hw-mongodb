@@ -5,6 +5,8 @@ import { registerSchema, loginSchema, resetEmailSchema } from '../schemas/auth.s
 import { resetPasswordSchema } from '../schemas/auth.schemas.js';
 import { resetPasswordController } from '../controllers/auth.controllers.js';
 
+console.log('Auth router loaded');
+
 const authRouter = express.Router();
 
 authRouter.post('/register', validateBody(registerSchema), registerController);

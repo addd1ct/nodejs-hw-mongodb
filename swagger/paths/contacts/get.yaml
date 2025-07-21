@@ -64,22 +64,28 @@ responses:
             data:
               type: object
               properties:
-                totalDocs:
-                  type: integer
-                  example: 100
-                limit:
-                  type: integer
-                  example: 10
-                totalPages:
-                  type: integer
-                  example: 10
-                page:
-                  type: integer
-                  example: 1
                 docs:
                   type: array
                   items:
                     $ref: '../../components/schemas/Contact.yaml'
+                page:
+                  type: integer
+                  example: 1
+                perPage:
+                  type: integer
+                  example: 10
+                totalItems:
+                  type: integer
+                  example: 100
+                totalPages:
+                  type: integer
+                  example: 10
+                hasPreviousPage:
+                  type: boolean
+                  example: false
+                hasNextPage:
+                  type: boolean
+                  example: true
   '401':
     description: Неавторизований
     content:
