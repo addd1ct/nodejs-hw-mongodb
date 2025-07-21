@@ -64,10 +64,6 @@ responses:
             data:
               type: object
               properties:
-                docs:
-                  type: array
-                  items:
-                    $ref: '../../components/schemas/Contact.yaml'
                 page:
                   type: integer
                   example: 1
