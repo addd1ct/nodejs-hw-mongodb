@@ -26,6 +26,10 @@ export function setupServer() {
 
   app.use('/swagger.json', express.static(path.join(process.cwd(), 'docs', 'swagger.json')));
 
+  app.use((req, res, next) => {
+  console.log('Request URL:', req.url);
+  next();
+});
   app.use(notFoundHandler);
   app.use(errorHandler);
 
