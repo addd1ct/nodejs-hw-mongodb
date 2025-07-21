@@ -115,9 +115,30 @@
                       "example": "Successfully found contacts!"
                     },
                     "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Contact"
+                      "type": "object",
+                      "properties": {
+                        "totalDocs": {
+                          "type": "integer",
+                          "example": 100
+                        },
+                        "limit": {
+                          "type": "integer",
+                          "example": 10
+                        },
+                        "totalPages": {
+                          "type": "integer",
+                          "example": 10
+                        },
+                        "page": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "docs": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Contact"
+                          }
+                        }
                       }
                     }
                   }
